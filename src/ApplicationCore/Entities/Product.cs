@@ -14,7 +14,7 @@ namespace ApplicationCore.Entities
 
         public decimal Price { get; set; }
 
-        public string? PictureIri { get; set; }
+        public string? PictureUri { get; set; }
 
         public int CategoryId { get; set; }
 
