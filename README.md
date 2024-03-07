@@ -20,7 +20,9 @@ A Sample N-layered .NET Core Project Demonstrating Clean Architecture and the Ge
 ### UnitTests
 ...
 
+
 ## Migrations
+
 Before running the following commands, ensure that "Web" is set as the startup project. Run the following commands in the "Infrastructure" project.
 
 ### Infrastructure
@@ -31,5 +33,3 @@ Update-Database -Context WatchWorldContext
 Add-Migration InitialIdentity -Context AppIdentityDbContext -OutputDir Identity/Migrations
 Update-Database -Context AppIdentityDbContext
 ```
-
-

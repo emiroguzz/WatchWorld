@@ -1,4 +1,5 @@
 using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -11,18 +12,23 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<WatchWorldContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("WatchWorldContext")));
+
 builder.Services.AddDbContext<AppIdentityDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("AppIdentityDbContext")));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+builder.Services.AddScoped<IBasketService, BasketService>();
 builder.Services.AddScoped<IHomeViewModelService, HomeViewModelService>();
+builder.Services.AddScoped<IBasketViewModelService, BasketViewModelService>();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppIdentityDbContext>();
+
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -39,6 +45,8 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseRequestLocalization("en-US");
 
 app.UseRouting();
 

@@ -27,7 +27,6 @@ namespace ApplicationCore.Services
             var basket = await GetOrCreateBasketAsync(buyerId);
             var basketItem = basket.Items.FirstOrDefault(x => x.ProductId == productId);
 
-
             if (basketItem != null)
             {
                 basketItem.Quantity += quantity;
@@ -43,10 +42,8 @@ namespace ApplicationCore.Services
                     Product = product!
                 };
                 basket.Items.Add(basketItem);
-                await _basketRepo.UpdateAsync(basket);
-
             }
-
+            await _basketRepo.UpdateAsync(basket);
             return basket;
         }
 
@@ -59,6 +56,7 @@ namespace ApplicationCore.Services
             {
                 await _basketItemRepo.DeleteAsync(basketItem);
             }
+
         }
 
         public async Task EmptyBasketAsync(string buyerId)
@@ -78,7 +76,7 @@ namespace ApplicationCore.Services
 
             if (basket == null)
             {
-                basket = new Basket() { BuyerId = buyerId};
+                basket = new Basket() { BuyerId = buyerId };
                 basket = await _basketRepo.AddAsync(basket);
             }
 
@@ -89,7 +87,7 @@ namespace ApplicationCore.Services
         {
             var basket = await GetOrCreateBasketAsync(buyerId);
 
-            foreach(var item in basket.Items)
+            foreach (var item in basket.Items)
             {
                 if (quantities.ContainsKey(item.ProductId))
                 {
@@ -98,19 +96,14 @@ namespace ApplicationCore.Services
                 }
             }
 
-
             return basket;
-
         }
 
         public async Task TransferBasketAsync(string sourceBuyerId, string destinationBuyerId)
         {
             var specSourceBasket = new BasketWithItemsSpecification(sourceBuyerId);
             var sourceBasket = await _basketRepo.FirstorDefaultAsync(specSourceBasket);
-            if (sourceBasket == null)
-            {
-                return;
-            }
+            if (sourceBasket == null) return;
 
             var destinationBasket = await GetOrCreateBasketAsync(destinationBuyerId);
 
