@@ -1,0 +1,78 @@
+﻿@model BasketViewModel
+
+@{
+    ViewData["Title"] = "Basket Index";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between">
+                <h3>Cart (@Model.TotalItems items)</h3>
+                <div>
+                    <button type="button" class="btn btn-danger">Empty Cart</button>
+                    <button type="button" class="btn btn-success">Update Cart</button>
+                </div>
+            </div>
+            @if (Model.Items.Any())
+            {
+                foreach (var item in Model.Items)
+                {
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="~/img/products/@item.PictureUri" class="img-fluid rounded-start" alt="Product Image">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5 class="card-title">@item.ProductName</h5>
+                                            <p class="card-text">UNIT PRICE: @item.UnitPrice.ToString("c2")</p>
+                                        </div>
+                                        <div class="number-input mb-0">
+                                            <input type="number" class="quantity form-control" value="@item.Quantity" />
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <a href="#!" type="button" class="text-decoration-none small text-uppercase me-3">
+                                                <i class="fas fa-trash-alt me-1"></i> Remove item
+                                            </a>
+                                            <a href="#!" type="button" class="text-decoration-none small text-uppercase">
+                                                <i class="fas fa-heart me-1"></i> Move to wish list
+                                            </a>
+                                        </div>
+                                        <p class="mb-0"><span><strong id="summary">@item.TotalPrice.ToString("c2")</strong></span></p>
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Your cart is empty.</p>
+            }
+        </div>
+        <div class="col-md-4">
+            <h3>Total Price</h3>
+            <div class="d-flex justify-content-between">
+                <p>Subtotal</p>
+                <p>@Model.TotalPrice.ToString("c2")</p>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p>Shipping</p>
+                <p>Free</p>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-between">
+                <p>The total amount of(including taxes)</p>
+                <strong>@Model.TotalPrice.ToString("c2")</strong>
+            </div>
+            <a class="btn btn-primary d-block" href="#">Go To Checkout</a>
+        </div>
+    </div>
+</div>

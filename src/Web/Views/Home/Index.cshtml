@@ -108,15 +108,36 @@
 </nav>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.all.min.js"></script>
     <script>
         $("[data-add-item]").click(function (e) {
             e.preventDefault();
             const productId = $(this).data("add-item");
             const url = "@Url.Action("AddItem", "Basket")";
-            
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "bottom-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+
             $.post(url, { productId }).then(data => {
+                Toast.fire({
+                    icon: "success",
+                    title: "Product added to basket"
+                });
                 console.log(data);
             });
         })
+
+        
+        
     </script>
+
+
 }
