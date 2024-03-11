@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Web.Interfaces;
 
 namespace Web.Controllers
@@ -26,10 +27,28 @@ namespace Web.Controllers
             return Json(basket);
         }
 
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Empty()
         {
-            var basketViewModel = await _basketViewModelService.GetBasketViewModelAsync();
-            return View(basketViewModel);
+            await _basketViewModelService.EmptyBasketAsync();
+            TempData["Message"] = "Basket is now empty";
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveItem(int productId)
+        {
+            await _basketViewModelService.RemoveItemAsync(productId);
+            TempData["Message"] = "Item was removed from your cart";
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update([ModelBinder(Name = "quantities")] Dictionary<int, int> quantities)
+        {
+            await _basketViewModelService.SetQuantitiesAsync(quantities);
+            TempData["Message"] = "Card has updated";
+            return RedirectToAction("Index");
         }
     }
 }
