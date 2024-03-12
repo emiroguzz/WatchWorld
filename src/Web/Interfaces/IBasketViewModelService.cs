@@ -17,5 +17,7 @@ namespace Web.Interfaces
 
         Task TransferBasketAsync();
 
+        Task CheckoutAsync(string street, string city, string? state, string country, string zipCode);
+
     }
 }
