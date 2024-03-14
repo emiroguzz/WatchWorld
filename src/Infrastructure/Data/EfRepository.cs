@@ -38,7 +38,7 @@ namespace Infrastructure.Data
             return await _db.Set<T>().WithSpecification(specification).FirstAsync();
         }
 
-        public async Task<T?> FirstorDefaultAsync(ISpecification<T> specification)
+        public async Task<T?> FirstOrDefaultAsync(ISpecification<T> specification)
         {
             return await _db.Set<T>().WithSpecification(specification).FirstOrDefaultAsync();
         }

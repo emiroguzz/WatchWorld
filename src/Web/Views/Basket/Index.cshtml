@@ -1,38 +1,59 @@
 ﻿@model BasketViewModel
-
 @{
-    ViewData["Title"] = "Basket Index";
+    ViewBag.Title = "Basket";
 }
 
-<div class="container">
+<!--Section: Block Content-->
+<section>
+
+    <!--Grid row-->
     <div class="row">
-        <div class="col-md-8">
+
+        <!--Grid column-->
+        <div class="col-lg-8">
             <form asp-action="Update">
-                <div class="d-flex justify-content-between">
-                    <h3>Cart (@Model.TotalItems items)</h3>
-                    <div>
-                        <button id="btnEmpty" type="button" class="btn btn-sm btn-danger">Empty Cart</button>
-                        <button class="btn btn-sm btn-success ms-2">Update Cart</button>
-                    </div>
-                </div>
-                @if (Model.Items.Any())
-                {
-                    foreach (var item in Model.Items)
-                    {
-                        <div class="card mb-3">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img src="~/img/products/@item.PictureUri" class="img-fluid rounded-start" alt="Product Image">
+                <!-- Card -->
+                <div class="mb-3">
+                    <div class="pt-4">
+
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <h5 class="mb-4">Cart (<span>@Model.TotalItems</span> items)</h5>
+
+                            <div>
+                                <button id="btnEmpty" type="button" class="btn btn-sm btn-danger">Empty Cart</button>
+                                <button class="btn btn-sm btn-success ms-2">Update Cart</button>
+                            </div>
+                        </div>
+
+                        @if (Model.Items.Count == 0)
+                        {
+                            <div class="text-center border rounded p-5 d-flex align-items-center justify-content-center flex-column">
+                                <i class="fa-solid display-1 fa-basket-shopping"></i>
+                                <p class="h2 mt-4">Your Cart is Currently Empty!</p>
+                                <p class="mt-3 text-secondary">Before proceed to checkout you must add some products to your shopping cart.</p>
+                                <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg mt-2">Return To Shop</a>
+                            </div>
+                        }
+
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="row mb-4">
+                                <div class="col-sm-3 col-lg-2 col-xl-2">
+                                    <div class="rounded mb-3 mb-md-0">
+                                        <img class="img-fluid w-100" src="~/img/products/@item.PictureUri" alt="Sample">
+                                    </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
+                                <div class="col-sm-9 col-lg-10 col-xl-10">
+                                    <div>
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <h5 class="card-title">@item.ProductName</h5>
-                                                <p class="card-text">UNIT PRICE: @item.UnitPrice.ToString("c2")</p>
+                                                <h5>@item.ProductName</h5>
+                                                <p class="mb-3 text-muted text-uppercase small">Unit Price: @item.UnitPrice.ToString("c2")</p>
                                             </div>
-                                            <div class="number-input mb-0">
-                                                <input type="number" class="quantity form-control" value="@item.Quantity" name="quantities[@item.ProductId]" />
+                                            <div>
+                                                <div class="number-input mb-0">
+                                                    <input class="quantity form-control" min="1" name="quantities[@item.ProductId]" value="@item.Quantity" type="number">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
@@ -46,51 +67,65 @@
                                             </div>
                                             <p class="mb-0"><span><strong id="summary">@item.TotalPrice.ToString("c2")</strong></span></p>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="text-center border rounded p-5 d-flex align-items-center justify-content-center flex-column">
-                        <i class="fa-solid display-1 fa-basket-shopping"></i>
-                        <h2 class="mt-4">Your Cart Is Currently Empty!</h2>
-                        <p class="m-4">Before proceed to checkout you must add som products to your shopping cart.</p>
-                        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Return To Shop</a>
+                            <hr class="mb-4">
+                        }
+
                     </div>
-                }
+                </div>
+                <!-- Card -->
             </form>
-            
         </div>
-        <div class="col-md-4">
-            <h3>Total Price</h3>
-            <div class="d-flex justify-content-between">
-                <p>Subtotal</p>
-                <p>@Model.TotalPrice.ToString("c2")</p>
+        <!--Grid column-->
+        <!--Grid column-->
+        <div class="col-lg-4 ps-lg-5">
+
+            <!-- Card -->
+            <div class="mb-3">
+                <div class="pt-4">
+
+                    <h5 class="mb-3">Total Price</h5>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                            Subtotal
+                            <span>@Model.TotalPrice.ToString("c2")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            Shipping
+                            <span>Free</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3 fw-bold">
+                            <span>The total amount of <br /> (including taxes)</span>
+                            <span>@Model.TotalPrice.ToString("c2")</span>
+                        </li>
+                    </ul>
+
+                    <a class="btn btn-primary d-block" href="/Basket/Checkout">Go To Checkout</a>
+
+                </div>
             </div>
-            <div class="d-flex justify-content-between">
-                <p>Shipping</p>
-                <p>Free</p>
-            </div>
-            <hr />
-            <div class="d-flex justify-content-between">
-                <p>The total amount of(including taxes)</p>
-                <strong>@Model.TotalPrice.ToString("c2")</strong>
-            </div>
-            <a class="btn btn-primary d-block" href="#">Go To Checkout</a>
+            <!-- Card -->
+
         </div>
+        <!--Grid column-->
+
     </div>
-</div>
+    <!-- Grid row -->
+
+</section>
+
 <form asp-action="Empty" id="frmEmpty"></form>
+
 <form asp-action="RemoveItem" id="frmRemoveItem">
     <input type="hidden" name="productId" id="hdnProductId" />
 </form>
 
+
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.all.min.js"></script>
+
     <script>
         const message = "@TempData["Message"]";
 
@@ -119,7 +154,6 @@
             const productId = $(this).data("remove-id");
             $("#hdnProductId").val(productId);
             $("#frmRemoveItem").submit();
-        })
+        });
     </script>
 }
-

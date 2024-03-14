@@ -21,6 +21,6 @@ namespace ApplicationCore.Interfaces
 
         Task<T> FirstAsync(ISpecification<T> specification);
 
-        Task<T?> FirstorDefaultAsync(ISpecification<T> specification);
+        Task<T?> FirstOrDefaultAsync(ISpecification<T> specification);
     }
 }

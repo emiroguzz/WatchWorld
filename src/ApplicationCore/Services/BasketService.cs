@@ -72,7 +72,7 @@ namespace ApplicationCore.Services
         public async Task<Basket> GetOrCreateBasketAsync(string buyerId)
         {
             var specBasket = new BasketWithItemsSpecification(buyerId);
-            var basket = await _basketRepo.FirstorDefaultAsync(specBasket);
+            var basket = await _basketRepo.FirstOrDefaultAsync(specBasket);
 
             if (basket == null)
             {
@@ -102,7 +102,7 @@ namespace ApplicationCore.Services
         public async Task TransferBasketAsync(string sourceBuyerId, string destinationBuyerId)
         {
             var specSourceBasket = new BasketWithItemsSpecification(sourceBuyerId);
-            var sourceBasket = await _basketRepo.FirstorDefaultAsync(specSourceBasket);
+            var sourceBasket = await _basketRepo.FirstOrDefaultAsync(specSourceBasket);
             if (sourceBasket == null) return;
 
             var destinationBasket = await GetOrCreateBasketAsync(destinationBuyerId);
